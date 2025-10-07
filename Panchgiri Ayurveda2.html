@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Panchgiri Ayurveda</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #e9f5e9; /* light green background */
+      color: #264d26; /* dark green text */
+      scroll-behavior: smooth;
+    }
+    header {
+      background-color: #2e7d32; /* rich green */
+      color: #e6f2e6; /* pale green text */
+      padding: 1rem 2rem;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    header h1 {
+      margin: 0;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+    nav {
+      background-color: #388e3c; /* medium green */
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      padding: 0.5rem 0;
+      position: sticky;
+      top: 60px;
+      z-index: 999;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    }
+    nav a {
+      color: #c8facc; /* light mint green */
+      text-decoration: none;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      transition: background-color 0.3s, color 0.3s;
+      position: relative;
+    }
+    nav a.active,
+    nav a:hover {
+      background-color: #66bb6a; /* bright green accent */
+      color: #1b3b1b; /* darker shade for contrast */
+    }
+    .hero {
+      text-align: center;
+      padding: 3rem 1rem;
+      background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+      color: white;
+      opacity: 0;
+      animation: fadeIn 1.5s ease forwards;
+      animation-delay: 0.2s;
+    }
+    .hero h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.7);
+    }
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.6);
+    }
+    section {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    h3 {
+      color: #2e7d32; /* header green */
+      font-weight: 700;
+      margin-bottom: 1rem;
+      border-bottom: 3px solid #66bb6a; /* bright green border */
+      display: inline-block;
+      padding-bottom: 0.3rem;
+    }
+    .services, .gallery, .testimonials {
+      display: flex;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .service-item, .gallery-item, .testimonial-item {
+      flex: 1 1 300px;
+      background: #f1f8f1; /* very light green */
+      box-shadow: 0 0 10px rgba(0,100,0,0.1);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    .service-item:hover, .gallery-item:hover, .testimonial-item:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(102,187,106,0.5);
+      cursor: pointer;
+    }
+    /* Ayurvedic images fade and zoom on load */
+    .service-item img, .gallery-item img {
+      max-width: 100%;
+      border-radius: 8px;
+      height: 180px;
+      object-fit: cover;
+      margin-bottom: 0.8rem;
+      opacity: 0;
+      transform: scale(0.95);
+      animation: imgFadeZoomIn 1s forwards;
+    }
+    /* Staggered animation delay */
+    .service-item:nth-child(1) img, .gallery-item:nth-child(1) img {
+      animation-delay: 0.3s;
+    }
+    .service-item:nth-child(2) img, .gallery-item:nth-child(2) img {
+      animation-delay: 0.5s;
+    }
+    .service-item:nth-child(3) img, .gallery-item:nth-child(3) img {
+      animation-delay: 0.7s;
+    }
+    /* Hover zoom effect on images */
+    .service-item:hover img, .gallery-item:hover img {
+      transform: scale(1.1);
+      transition: transform 0.5s ease;
+    }
+    .service-item h4 {
+      margin-bottom: 0.5rem;
+      color: #2e7d32;
+    }
+    .contact {
+      background-color: #dcedc8; /* pale green */
+      border-radius: 8px;
+      padding: 1.5rem;
+      text-align: center;
+      max-width: 600px;
+      margin: 2rem auto;
+      box-shadow: 0 0 10px rgba(102,187,106,0.4);
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+    .contact.visible {
+      opacity: 1;
+    }
+    .contact h3 {
+      margin-bottom: 1rem;
+    }
+    .contact p {
+      margin: 0.5rem 0;
+      font-weight: 600;
+      color: #1b5e20;
+    }
+    footer {
+      background-color: #2e7d32;
+      color: #c8facc;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      margin-top: 3rem;
+    }
+    form.newsletter {
+      text-align: center;
+      margin-top: 2rem;
+    }
+    form.newsletter input[type="email"] {
+      padding: 0.6rem;
+      width: 250px;
+      max-width: 90%;
+      border: 2px solid #2e7d32;
+      border-radius: 6px 0 0 6px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+    form.newsletter input[type="email"]:focus {
+      border-color: #66bb6a;
+    }
+    form.newsletter button {
+      padding: 0.65rem 1rem;
+      border: none;
+      background-color: #2e7d32;
+      color: #c8facc;
+      border-radius: 0 6px 6px 0;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    form.newsletter button:hover {
+      background-color: #66bb6a;
+    }
+    #backToTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      background-color: #2e7d32;
+      color: #c8facc;
+      border: none;
+      padding: 0.7rem 1rem;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: none;
+      box-shadow: 0 0 10px rgba(102,187,106,0.6);
+      transition: background-color 0.3s;
+      z-index: 1000;
+    }
+    #backToTop:hover {
+      background-color: #66bb6a;
+    }
+    @media (max-width: 600px) {
+      .services, .gallery, .testimonials {
+        flex-direction: column;
+      }
+      nav {
+        flex-wrap: wrap;
+      }
+    }
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+      }
+    }
+    @keyframes imgFadeZoomIn {
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Panchgiri Ayurveda</h1>
+  </header>
+  <nav id="navbar">
+    <a href="#about" class="nav-link active">About Us</a>
+    <a href="#services" class="nav-link">Our Services</a>
+    <a href="#gallery" class="nav-link">Gallery</a>
+    <a href="#testimonials" class="nav-link">Testimonials</a>
+    <a href="#contact" class="nav-link">Contact</a>
+  </nav>
+
+  <section class="hero">
+    <h2>Traditional Ayurveda Healing for Holistic Wellness</h2>
+    <p>Experience natural healing with Panchgiri Ayurveda using organic herbs and personalized care.</p>
+  </section>
+
+  <section id="about" class="fade-section">
+    <h3>About Panchgiri Ayurveda</h3>
+    <p>Panchgiri Ayurveda is committed to providing authentic Ayurvedic healthcare using time-tested traditional methods and organic herbs sourced from natural farms. Our approach treats the root cause of ailments to bring balanced health and wellness.</p>
+  </section>
+
+  <section id="services" class="fade-section">
+    <h3>Our Services</h3>
+    <div class="services">
+      <div class="service-item">
+        <img src="https://images.unsplash.com/photo-1542831371-29b0f74f9713?auto=format&fit=crop&w=400&q=80" alt="Ayurvedic Massage" />
+        <h4>Ayurvedic Massage</h4>
+        <p>Relax and rejuvenate with traditional herbal massage therapies tailored to your constitution.</p>
+      </div>
+      <div class="service-item">
+        <img src="https://images.unsplash.com/photo-1501004318641-b39e6451bec6?auto=format&fit=crop&w=400&q=80" alt="Herbal Medicine" />
+        <h4>Herbal Medicine</h4>
+        <p>Natural herbal formulations prepared as per classic Ayurvedic principles to support healing.</p>
+      </div>
+      <div class="service-item">
+        <img src="https://images.unsplash.com/photo-1526256262350-7da7584cf5eb?auto=format&fit=crop&w=400&q=80" alt="Health Consultation" />
+        <h4>Health Consultation</h4>
+        <p>Personalized Ayurvedic health consultation for diet, lifestyle, and treatment plans.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery" class="fade-section">
+    <h3>Gallery</h3>
+    <div class="gallery">
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1468071174046-657d9d351a40?auto=format&fit=crop&w=400&q=80" alt="Ayurveda Herbs" />
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=400&q=80" alt="Ayurvedic Oils" />
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1501183638714-7f3a2a2ab0a8?auto=format&fit=crop&w=400&q=80" alt="Ayurvedic Clin" />
+      </div>
+    </div>
+  </section>
+
+  <section id="testimonials" class="fade-section">
+    <h3>Testimonials</h3>
+    <div class="testimonials">
+      <div class="testimonial-item">
+        <p>"The Ayurvedic treatments at Panchgiri Ayurveda helped me regain my health naturally. Highly recommended!"</p>
+        <strong>- S. Patil</strong>
+      </div>
+      <div class="testimonial-item">
+        <p>"Authentic and caring service with knowledgeable practitioners. Great experience overall."</p>
+        <strong>- M. Joshi</strong>
+      </div>
+      <div class="testimonial-item">
+        <p>"Personalized health consultation and herbal remedies made a real difference in my wellbeing."</p>
+        <strong>- R. Deshmukh</strong>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact fade-section">
+    <h3>Contact & Address</h3>
+    <p><strong>Panchgiri Ayurveda </strong></p>
+    <p>WALIVADE, SAHYADRI CHEM, WALIVADE, NEAR HOTEL JAIBHAWANI, CHINCHWAD ROAD, WALIVADE, MAHARASHTRA, KOLHAPUR, Pin 416119</p>
+    <p>WALIVADE, MAHARASHTRA 416119</p>
+    <p>Phone: 9371102470</p>
+    <p>Email: contact@panchgiriayurveda.com</p>
+
+    <form class="newsletter" onsubmit="subscribeNewsletter(event)">
+      <label for="email" style="font-weight: 700;">Subscribe to our Newsletter</label><br />
+      <input type="email" id="email" name="email" placeholder="Your email address" required />
+      <button type="submit">Subscribe</button>
+    </form>
+  </section>
+
+  <button id="backToTop" title="Back to Top">&#8679;</button>
+
+  <footer>
+    &copy; 2025 Panchgiri Ayurveda. All rights reserved.
+  </footer>
+
+  <script>
+    function isInViewport(el) {
+      const rect = el.getBoundingClientRect();
+      return (
+        rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.85
+      );
+    }
+    function handleScroll() {
+      document.querySelectorAll('.fade-section').forEach((section) => {
+        if (isInViewport(section)) {
+          section.classList.add('visible');
+        }
+      });
+      const sections = ['about', 'services', 'gallery', 'testimonials', 'contact'];
+      let scrollPos = window.scrollY || document.documentElement.scrollTop;
+      sections.forEach(id => {
+        const section = document.getElementById(id);
+        const link = document.querySelector(`nav a[href="#${id}"]`);
+        if (section.offsetTop <= scrollPos + 100 && section.offsetTop + section.offsetHeight > scrollPos + 100) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+      const backToTop = document.getElementById('backToTop');
+      if(scrollPos > 300) {
+        backToTop.style.display = 'block';
+      } else {
+        backToTop.style.display = 'none';
+      }
+    }
+    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('load', () => {
+      handleScroll();
+      document.querySelectorAll('.fade-section').forEach(s => s.classList.add('visible'));
+    });
+    document.getElementById('backToTop').addEventListener('click', () => {
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+    function subscribeNewsletter(event) {
+      event.preventDefault();
+      const emailInput = document.getElementById('email');
+      alert(`Thank you for subscribing with ${emailInput.value}!`);
+      emailInput.value = '';
+    }
+  </script>
+</body>
+</html>
